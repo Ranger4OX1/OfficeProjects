@@ -1,0 +1,11 @@
+C:\Users\Ehtisham\Desktop\GtiOfcProjects\testApp1\testApp1\testApp1\bin\Debug\testApp1.exe.config
+C:\Users\Ehtisham\Desktop\GtiOfcProjects\testApp1\testApp1\testApp1\bin\Debug\testApp1.exe
+C:\Users\Ehtisham\Desktop\GtiOfcProjects\testApp1\testApp1\testApp1\bin\Debug\testApp1.pdb
+C:\Users\Ehtisham\Desktop\GtiOfcProjects\testApp1\testApp1\testApp1\obj\Debug\testApp1.csproj.AssemblyReference.cache
+C:\Users\Ehtisham\Desktop\GtiOfcProjects\testApp1\testApp1\testApp1\obj\Debug\testApp1.csproj.SuggestedBindingRedirects.cache
+C:\Users\Ehtisham\Desktop\GtiOfcProjects\testApp1\testApp1\testApp1\obj\Debug\testApp1.Form1.resources
+C:\Users\Ehtisham\Desktop\GtiOfcProjects\testApp1\testApp1\testApp1\obj\Debug\testApp1.Properties.Resources.resources
+C:\Users\Ehtisham\Desktop\GtiOfcProjects\testApp1\testApp1\testApp1\obj\Debug\testApp1.csproj.GenerateResource.cache
+C:\Users\Ehtisham\Desktop\GtiOfcProjects\testApp1\testApp1\testApp1\obj\Debug\testApp1.csproj.CoreCompileInputs.cache
+C:\Users\Ehtisham\Desktop\GtiOfcProjects\testApp1\testApp1\testApp1\obj\Debug\testApp1.exe
+C:\Users\Ehtisham\Desktop\GtiOfcProjects\testApp1\testApp1\testApp1\obj\Debug\testApp1.pdb
