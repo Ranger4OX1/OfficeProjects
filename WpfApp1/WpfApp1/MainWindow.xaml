@@ -58,6 +58,7 @@
         <RoutedUICommand x:Key="CancelCommand" Text="Cancel"/>
         <CollectionViewSource x:Key="modtreeViewSource" d:DesignSource="{d:DesignInstance {x:Type local:modtree}}"/>
         <CollectionViewSource x:Key="moduleViewSource" d:DesignSource="{d:DesignInstance {x:Type local:modtree}}"/>
+        <CollectionViewSource x:Key="secLvl2ViewSource" d:DesignSource="{d:DesignInstance {x:Type local:modtree}}"/>
     </Window.Resources>
     <Window.Background>
         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
@@ -123,7 +124,7 @@
                   Text="{Binding s102, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Margin="0,0,6,0" VerticalAlignment="Center" IsEnabled="False"/>
         </Grid>
 
-        <Grid x:Name="newSectionLvl1Grid" Grid.Row="1"  HorizontalAlignment="Left" Margin="5,60,0,0" Visibility="Collapsed" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource modtreeViewSource}" Width="1126" Grid.RowSpan="2">
+        <Grid x:Name="newSectionLvl1Grid" Grid.Row="1"  HorizontalAlignment="Left" Margin="5,60,0,0" Visibility="Collapsed" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource moduleViewSource}" Width="1126" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -138,18 +139,18 @@
 
             <Label Content="Section Name:" Grid.Row="1" Style="{StaticResource Label}" Margin="3,0,0,0" Height="auto" Width="auto"/>
             <TextBox x:Name="newSectionLvl1_sectionNameTextBox" Grid.Row="1" Style="{StaticResource TextBox}"
-                  Text="{Binding s1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="108,0,0,0" HorizontalAlignment="Left" Width="250" Height="28" />
+                  Text="{Binding s2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="108,0,0,0" HorizontalAlignment="Left" Width="250" Height="28" />
 
             <Label Content="Section Code:" Grid.Row="2" Style="{StaticResource Label}" Margin="3,0,0,0" Height="auto" Width="auto"/>
             <TextBox x:Name="newSectionLvl1_sectionCodeTextBox" Grid.Row="2" Style="{StaticResource TextBox}"
-                  Text="{Binding s2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="108,0,0,0"  HorizontalAlignment="Left" Height="28" Width="250" />
+                  Text="{Binding s1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="108,0,0,0"  HorizontalAlignment="Left" Height="28" Width="250" />
             <Button Grid.Column="1" Grid.Row="1" Content="Add Section" HorizontalAlignment="Center" Style="{StaticResource cmdButton}" VerticalAlignment="Center" Click="addSecLvl1Button_Click" Height="24" Width="130" >
                 <Button.Background>
                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuColorKey}}"/>
                 </Button.Background>
             </Button>
         </Grid>
-        <Grid x:Name="newSectionLvl2Grid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,155,0,0" Visibility="Collapsed" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource modtreeViewSource}" Width="1126" Grid.RowSpan="2" IsEnabled="False">
+        <Grid x:Name="newSectionLvl2Grid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,155,0,0" Visibility="Collapsed" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource secLvl2ViewSource}" Width="1126" Grid.RowSpan="2" IsEnabled="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="375*" />
                 <ColumnDefinition Width="163*" />
@@ -165,11 +166,11 @@
 
             <Label Content="Section Name:" Grid.Row="1" Style="{StaticResource Label}" Margin="3,0,0,0" Height="auto" Width="auto"/>
             <TextBox x:Name="newSectionLvl2_sectionNameTextBox" Grid.Row="1" Style="{StaticResource TextBox}"
-                  Text="{Binding s1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="108,0,0,0" HorizontalAlignment="Left" Width="250" Height="28" />
+                  Text="{Binding s2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="108,0,0,0" HorizontalAlignment="Left" Width="250" Height="28" />
 
             <Label Content="Section Code:" Grid.Row="2" Style="{StaticResource Label}" Margin="3,0,0,0" Height="auto" Width="auto"/>
             <TextBox x:Name="newSectionLvl2_sectionCodeTextBox" Grid.Row="2" Style="{StaticResource TextBox}"
-                  Text="{Binding s2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="108,0,0,0" HorizontalAlignment="Left" Height="28" Width="250" />
+                  Text="{Binding s1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="108,0,0,0" HorizontalAlignment="Left" Height="28" Width="250" />
             <Button Grid.Column="1" Grid.Row="1" Content="Add Section" HorizontalAlignment="Left" Style="{StaticResource cmdButton}" VerticalAlignment="Center" Click="addSecLvl2Button_Click" Height="24" Width="130" Grid.ColumnSpan="2" Margin="123,0,0,0" >
                 <Button.Background>
                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuColorKey}}"/>
@@ -395,7 +396,9 @@
         <DataGrid x:Name="modtreeDataGrid" HorizontalAlignment="Center" Height="338" Grid.Row="2" VerticalAlignment="Top" Width="1121" SelectionUnit="FullRow" SelectionMode="Single" IsSynchronizedWithCurrentItem="True"  Margin="0,10,0,0" Visibility="Collapsed" ItemsSource="{Binding Source={StaticResource modtreeViewSource}}"/>
 
         <DataGrid x:Name="moduleDataGrid" HorizontalAlignment="Center" Height="341" Grid.Row="2" Width="1121" SelectionUnit="FullRow" SelectionMode="Single" IsSynchronizedWithCurrentItem="True"  Margin="0,13,0,0" Visibility="Collapsed" SelectionChanged="moduleDataGrid_SelectionChanged" ItemsSource="{Binding Source={StaticResource moduleViewSource}}" />
-        
+
+        <DataGrid x:Name="secLvl2DataGrid" HorizontalAlignment="Center" Height="341" Grid.Row="2" Width="1121" SelectionUnit="FullRow" SelectionMode="Single" IsSynchronizedWithCurrentItem="True"  Margin="0,13,0,0" Visibility="Collapsed" SelectionChanged="moduleDataGrid_SelectionChanged" ItemsSource="{Binding Source={StaticResource secLvl2ViewSource}}" />
+
         <Button x:Name="addScreenButton"  Content="Add Screen" HorizontalAlignment="Right" Style="{StaticResource cmdButton}" VerticalAlignment="Top" Click="addScreenButton_Click" Height="35" Width="182" Margin="0,258,10,0" Grid.Row="2" Visibility="Collapsed" >
             <Button.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuColorKey}}"/>

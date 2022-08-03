@@ -39,7 +39,6 @@ namespace WpfApp1
             using (var ctx = new DBEntities())
             {
                 var mods = ctx.modtrees
-
                                 .Where(s => s.s1 == sVal).First();
                 return mods;
             }
@@ -48,8 +47,8 @@ namespace WpfApp1
         public void InsertSectionLvl1(modtree module, string secName, string secCode)
         {
             modtree entry = new modtree();
-            entry.s1 = secName;
-            entry.s2 = secCode;
+            entry.s1 = secCode;
+            entry.s2 = secName;
             entry.s3 = "1";
             entry.s39 = "1";
             entry.s40 = module.s1.ToString().Substring(0, 2);
@@ -67,11 +66,11 @@ namespace WpfApp1
         public void InsertSectionLvl2(modtree module, string secName, string secCode)
         {
             modtree entry = new modtree();
-            entry.s1 = secName;
-            entry.s2 = secCode;
+            entry.s1 = secCode;
+            entry.s2 = secName;
             entry.s3 = "1";
             entry.s39 = "2";
-            entry.s40 = module.s1.ToString().Substring(0, 4);
+            entry.s40 = secCode.Substring(0, 4);
             entry.s100 = "SEC";
             entry.s101 = module.s101;
             entry.s102 = "SEC";
@@ -83,6 +82,8 @@ namespace WpfApp1
                 modtreeContext.SaveChanges();
             }
         }
+
+       
 
         public List<modtree> GetAll()
         {
@@ -151,9 +152,10 @@ namespace WpfApp1
             }
             return arr;
         }
+
         public  DataTable Exec(string sql)
         {
-            IDictionary<int, string> comboData = new Dictionary<int, string>();
+            //IDictionary<int, string> comboData = new Dictionary<int, string>();
 
             SqlConnection conn = GetConnection();
             SqlDataAdapter da = new SqlDataAdapter(sql, conn);
