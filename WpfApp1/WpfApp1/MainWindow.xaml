@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="auto" Width="auto"
+        Title="MainWindow" Height="auto" Width="1136"
     SizeToContent="WidthAndHeight">
     <Window.Resources>
         <Style x:Key="Label" TargetType="{x:Type Label}" BasedOn="{x:Null}">
@@ -17,6 +17,25 @@
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
         <Style x:Key="TextBox" TargetType="{x:Type TextBox}" BasedOn="{x:Null}">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Height" Value="auto"/>
+            <Setter Property="Width" Value="auto"/>
+            <Setter Property="MinWidth" Value="150"/>
+        </Style>
+        <!--Background="#FFACBDAA" Foreground="#FF1D9B37" FontFamily="Cascadia Code"-->
+        <Style x:Key="CheckBx" TargetType="{x:Type CheckBox}" BasedOn="{x:Null}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="3,3,3,3"/>
+            <Setter Property="Background" Value="#FFACBDAA"/>
+            <Setter Property="Foreground" Value="#FF1363C1"/>
+            <Setter Property="FontFamily" Value="Cascadia Code"/>
+        </Style>
+        <Style x:Key="displayLabel" TargetType="{x:Type Label}" BasedOn="{x:Null}">
             <Setter Property="HorizontalAlignment" Value="Right"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="FontSize" Value="16"/>
@@ -59,6 +78,8 @@
         <CollectionViewSource x:Key="modtreeViewSource" d:DesignSource="{d:DesignInstance {x:Type local:modtree}}"/>
         <CollectionViewSource x:Key="moduleViewSource" d:DesignSource="{d:DesignInstance {x:Type local:modtree}}"/>
         <CollectionViewSource x:Key="secLvl2ViewSource" d:DesignSource="{d:DesignInstance {x:Type local:modtree}}"/>
+        <CollectionViewSource x:Key="screenViewSource" d:DesignSource="{d:DesignInstance {x:Type local:modtree}}"/>
+        <CollectionViewSource x:Key="screenDVViewSource" d:DesignSource="{d:DesignInstance {x:Type local:dv}}"/>
     </Window.Resources>
     <Window.Background>
         <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
@@ -97,7 +118,7 @@
             <StackPanel Width="125"/>
         </StackPanel>
 
-        <Grid x:Name="ModuleInfoGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,12,0,0" Visibility="Collapsed" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource modtreeViewSource}" Grid.RowSpan="2" Width="1126" >
+        <Grid x:Name="ModuleInfoGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,12,0,0" Visibility="Visible" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource modtreeViewSource}" Grid.RowSpan="2" Width="1126" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -108,7 +129,8 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Label Content="ID :" Grid.Column="0" Style="{StaticResource Label}" Height="auto"/>
-            <TextBox x:Name="edit_idTextBox" Style="{StaticResource TextBox}" Grid.Column="0"                 Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" IsEnabled="False" HorizontalAlignment="Left" Margin="34,0,0,0"/>
+            <TextBox x:Name="edit_idTextBox" Style="{StaticResource TextBox}" Grid.Column="0"                 
+                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" IsEnabled="False" HorizontalAlignment="Left" Margin="34,0,0,0"/>
 
             <Label Content="Module Code:" Grid.Row="0" Grid.Column="1"  Style="{StaticResource Label}" Margin="0,1,0,0" VerticalAlignment="Center"/>
             <TextBox x:Name="edit_moduleCodeTextBox" Style="{StaticResource TextBox}" Grid.Column="1"
@@ -123,7 +145,151 @@
             <TextBox x:Name="edit_docTypeTextBox" Grid.Row="0" Grid.Column="3" Style="{StaticResource TextBox}"
                   Text="{Binding s102, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Margin="0,0,6,0" VerticalAlignment="Center" IsEnabled="False"/>
         </Grid>
+        <Grid x:Name="SectionInfoGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,52,0,0" Visibility="Visible" VerticalAlignment="Top" Background="WhiteSmoke"  Grid.RowSpan="2" Width="1126" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Label Content="Section Name:" Grid.Column="0" Style="{StaticResource Label}" Height="auto"/>
+            <Label x:Name="secInfo_sectionNameLbl"  Grid.Column="0" Style="{StaticResource displayLabel}" Height="auto"/>
 
+            <Label Content="Section Code:" Grid.Column="1" Style="{StaticResource Label}" Height="auto"/>
+            <Label x:Name="secInfo_secInfo_sectionCodeLbl"  Grid.Column="1" Style="{StaticResource displayLabel}" Height="auto"/>
+
+            <Label Content="Sub Section Name:" Grid.Column="2" Style="{StaticResource Label}" Height="auto"/>
+            <Label x:Name="secInfo_subSectionNameLbl"  Grid.Column="2" Style="{StaticResource displayLabel}" Height="auto"/>
+
+            <Label Content="Sub Section Code:" Grid.Column="3" Style="{StaticResource Label}" Height="auto"/>
+            <Label x:Name="secInfo_subSectionCodeLbl"  Grid.Column="3" Style="{StaticResource displayLabel}" Height="auto"/>
+
+
+        </Grid>
+        <Grid x:Name="screenHeaderGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,90,0,0" Visibility="Visible" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource screenViewSource}" Grid.RowSpan="2" Width="1126" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Content="Doc Type:" Grid.Row="0"  Style="{StaticResource Label}" />
+            <TextBox x:Name="screen_docTypeTextBox" Style="{StaticResource TextBox}" 
+                     Text="{Binding s100, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+
+            <Label Content="Status:" Grid.Column="1"  Style="{StaticResource Label}" />
+            <TextBox x:Name="screen_statusTextBox" Style="{StaticResource TextBox}" Grid.Column="1"
+                  Text="{Binding s101, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+
+            <Label Content="Tab:" Grid.Column="2" Grid.Row="0" Style="{StaticResource Label}"/>
+            <ComboBox x:Name="screen_tabComboBox" Grid.Column="2" Grid.Row="0" Style="{StaticResource ComboBox}" Text="{Binding s101}" HorizontalAlignment="Right" >
+                <ComboBoxItem Content="M"/>
+                <ComboBoxItem Content="D"/>
+                <ComboBoxItem Content="RPT"/>
+            </ComboBox>
+
+            <Label Content="Tree Level:" Grid.Column="3"  Style="{StaticResource Label}"  />
+            <TextBox x:Name="screen_treelvlTextBox" Style="{StaticResource TextBox}" Grid.Column="3"
+                  Text="{Binding s39, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+
+            <Label Content="Screen Name:" Grid.Column="0" Grid.Row="1"  Style="{StaticResource Label}" />
+            <TextBox x:Name="screen_screenNameTextBox" Style="{StaticResource TextBox}" Grid.Column="0" Grid.Row="1"
+                  Text="{Binding s39, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+
+            <Label Content="Screen Code:" Grid.Column="1" Grid.Row="1"  Style="{StaticResource Label}" />
+            <TextBox x:Name="screen_screenCodeTextBox" Style="{StaticResource TextBox}" Grid.Column="1" Grid.Row="1"
+                  Text="{Binding s39, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+
+        </Grid>
+        <Grid x:Name="screenButtonsGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,165,0,0" Visibility="Visible" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource screenViewSource}" Grid.RowSpan="2" Width="1126" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Content="BUTTONS" FontFamily="Copperplate Gothic Bold" HorizontalAlignment="Center" />
+            <CheckBox x:Name="btns_addCB" Content="Add" Grid.Column="1" Style="{StaticResource CheckBx}"  />
+            <CheckBox x:Name="btns_editCB" Content="Edit" Grid.Column="2" Style="{StaticResource CheckBx}"  />
+            <CheckBox x:Name="btns_deleteCB" Content="Delete" Grid.Column="3" Style="{StaticResource CheckBx}"  />
+            <CheckBox x:Name="btns_postCB" Content="Post" Grid.Column="4" Style="{StaticResource CheckBx}"  />
+            <CheckBox x:Name="btns_previewCB" Content="Preview" Grid.Column="5" Style="{StaticResource CheckBx}"  />
+
+        </Grid>
+        <Grid x:Name="screenStatusGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,193,0,0" Visibility="Visible" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource screenViewSource}" Grid.RowSpan="2" Width="1126" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Content="STATUS" FontFamily="Copperplate Gothic Bold" HorizontalAlignment="Center" />
+            <CheckBox x:Name="sts_postedCB" Content="Posted" Grid.Column="1" Style="{StaticResource CheckBx}"  />
+            <CheckBox x:Name="sts_unpostedCB" Content="UnPosted" Grid.Column="2" Style="{StaticResource CheckBx}"  />
+        </Grid>
+        <Grid x:Name="dvGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,220,0,0" Visibility="Visible" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource screenDVViewSource}" Grid.RowSpan="2" Width="1126" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Label Content="Field :" Grid.Column="0" Style="{StaticResource Label}" />
+            <TextBox x:Name="dv_fieldTextBox" Style="{StaticResource TextBox}" Grid.Column="0"                 
+                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+            
+            <Label Content="Name :" Grid.Column="1" Style="{StaticResource Label}" />
+            <TextBox x:Name="dv_nameTextBox" Style="{StaticResource TextBox}" Grid.Column="1"                 
+                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+
+            <Label Content="Combo Code :" Grid.Column="2" Style="{StaticResource Label}" />
+            <TextBox x:Name="dv_comboCdTextBox" Style="{StaticResource TextBox}" Grid.Column="2"                 
+                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+
+            <Label Content="List Item :" Grid.Column="3" Style="{StaticResource Label}" />
+            <TextBox x:Name="dv_listItemTextBox" Style="{StaticResource TextBox}" Grid.Column="3"                 
+                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+
+            <Label Content="Validation :" Grid.Column="0" Grid.Row="1"  Style="{StaticResource Label}" />
+            <TextBox x:Name="dv_validationTextBox" Style="{StaticResource TextBox}" Grid.Column="0" Grid.Row="1"
+                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+
+            <Label Content="Tab Code :" Grid.Column="1" Grid.Row="1" Style="{StaticResource Label}" />
+            <TextBox x:Name="dv_tabCdTextBox" Style="{StaticResource TextBox}" Grid.Column="1" Grid.Row="1"                
+                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+
+            <Label Content="Table Name:" Grid.Column="2" Grid.Row="1" Style="{StaticResource Label}" />
+            <TextBox x:Name="dv_tableNameTextBox" Style="{StaticResource TextBox}" Grid.Column="2" Grid.Row="1"                
+                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+
+            <Label Content="Bootstrap:" Grid.Column="3" Grid.Row="1" Style="{StaticResource Label}" />
+            <TextBox x:Name="dv_botstrapTextBox" Style="{StaticResource TextBox}" Grid.Column="3" Grid.Row="1"                
+                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+        </Grid>
+        
         <Grid x:Name="newSectionLvl1Grid" Grid.Row="1"  HorizontalAlignment="Left" Margin="5,60,0,0" Visibility="Collapsed" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource moduleViewSource}" Width="1126" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -178,6 +344,7 @@
             </Button>
 
         </Grid>
+        
 
         <!--<Grid x:Name="sectionGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,60,0,0" Visibility="Visible" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource modtreeViewSource}" Width="798">
             <Grid.ColumnDefinitions>
@@ -393,6 +560,13 @@
                 </Button.Background>
             </Button>
         </Grid>
+
+
+
+
+
+
+
         <DataGrid x:Name="modtreeDataGrid" HorizontalAlignment="Center" Height="338" Grid.Row="2" VerticalAlignment="Top" Width="1121" SelectionUnit="FullRow" SelectionMode="Single" IsSynchronizedWithCurrentItem="True"  Margin="0,10,0,0" Visibility="Collapsed" ItemsSource="{Binding Source={StaticResource modtreeViewSource}}"/>
 
         <DataGrid x:Name="moduleDataGrid" HorizontalAlignment="Center" Height="341" Grid.Row="2" Width="1121" SelectionUnit="FullRow" SelectionMode="Single" IsSynchronizedWithCurrentItem="True"  Margin="0,13,0,0" Visibility="Collapsed" SelectionChanged="moduleDataGrid_SelectionChanged" ItemsSource="{Binding Source={StaticResource moduleViewSource}}" />
