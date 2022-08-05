@@ -83,8 +83,6 @@ namespace WpfApp1
             }
         }
 
-       
-
         public List<modtree> GetAll()
         {
             using (var context = new DBEntities())
@@ -202,7 +200,7 @@ namespace WpfApp1
             }
         }
 
-        public void RemoveStudent(int id)
+        public void RemoveMod(decimal id)
         {
             var modtreObj = modtreeContext.modtrees.Find(id);
             if (modtreObj != null)

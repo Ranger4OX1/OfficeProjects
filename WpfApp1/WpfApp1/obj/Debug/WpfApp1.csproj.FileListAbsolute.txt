@@ -20,3 +20,5 @@ C:\Users\Ehtisham\Desktop\GtiOfcProjects\WpfApp1\WpfApp1\obj\Debug\WpfApp1.cspro
 C:\Users\Ehtisham\Desktop\GtiOfcProjects\WpfApp1\WpfApp1\obj\Debug\WpfApp1.csproj.CopyComplete
 C:\Users\Ehtisham\Desktop\GtiOfcProjects\WpfApp1\WpfApp1\obj\Debug\WpfApp1.exe
 C:\Users\Ehtisham\Desktop\GtiOfcProjects\WpfApp1\WpfApp1\obj\Debug\WpfApp1.pdb
+C:\Users\Ehtisham\Desktop\GtiOfcProjects\WpfApp1\WpfApp1\obj\Debug\Window1.g.cs
+C:\Users\Ehtisham\Desktop\GtiOfcProjects\WpfApp1\WpfApp1\obj\Debug\Window1.baml

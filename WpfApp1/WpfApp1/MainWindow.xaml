@@ -69,12 +69,13 @@
         <RoutedUICommand x:Key="LastCommand" Text="Last"/>
         <RoutedUICommand x:Key="NextCommand" Text="Next"/>
         <RoutedUICommand x:Key="PreviousCommand" Text="Previous"/>
-        <RoutedUICommand x:Key="DeleteModuleCommand" Text="Delete Customer"/>
+        <!--<RoutedUICommand x:Key="DeleteModuleCommand" Text="Delete Customer"/>-->
         <!--<RoutedUICommand x:Key="DeleteSectionCommand" Text="Delete Section"/>-->
-        <RoutedUICommand x:Key="UpdateCommand" Text="Update"/>
+        <!--<RoutedUICommand x:Key="UpdateCommand" Text="Update"/>-->
         <RoutedUICommand x:Key="SelectModuleCommand" Text="Update"/>
         <RoutedUICommand x:Key="AddModuleCommand" Text="Add"/>
         <RoutedUICommand x:Key="CancelCommand" Text="Cancel"/>
+        <RoutedUICommand x:Key="RefreshCommand" Text="Cancel"/>
         <CollectionViewSource x:Key="modtreeViewSource" d:DesignSource="{d:DesignInstance {x:Type local:modtree}}"/>
         <CollectionViewSource x:Key="moduleViewSource" d:DesignSource="{d:DesignInstance {x:Type local:modtree}}"/>
         <CollectionViewSource x:Key="secLvl2ViewSource" d:DesignSource="{d:DesignInstance {x:Type local:modtree}}"/>
@@ -89,12 +90,13 @@
         <CommandBinding Command="{StaticResource LastCommand}" Executed="LastCommandHandler"/>
         <CommandBinding Command="{StaticResource NextCommand}" Executed="NextCommandHandler"/>
         <CommandBinding Command="{StaticResource PreviousCommand}" Executed="PreviousCommandHandler"/>
-        <CommandBinding Command="{StaticResource DeleteModuleCommand}" Executed="DeleteModuleCommandHandler"/>
+        <!--<CommandBinding Command="{StaticResource DeleteModuleCommand}" Executed="DeleteModuleCommandHandler"/>-->
         <!--<CommandBinding Command="{StaticResource UpdateModuleCommand}" Executed="UpdateModuleCommandHandler"/>-->
-        <CommandBinding Command="{StaticResource UpdateCommand}" Executed="UpdateCommandHandler"/>
+        <!--<CommandBinding Command="{StaticResource UpdateCommand}" Executed="UpdateCommandHandler"/>-->
         <CommandBinding Command="{StaticResource AddModuleCommand}" Executed="AddCommandHandler"/>
         <CommandBinding Command="{StaticResource CancelCommand}" Executed="CancelCommandHandler"/>
         <CommandBinding Command="{StaticResource SelectModuleCommand}" Executed="SelectModuleCommandHandler"/>
+        <CommandBinding Command="{StaticResource RefreshCommand}" Executed="RefreshCommandCommandHandler"/>
     </Window.CommandBindings>
     <Grid Height="559" VerticalAlignment="Top">
         <Grid.RowDefinitions>
@@ -102,23 +104,24 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Margin="2,2,2,0" Height="40" VerticalAlignment="Top" Background="Gainsboro" DataContext="{StaticResource modtreeViewSource}" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
+        <StackPanel Orientation="Horizontal"  Margin="2,2,2,0" Height="40" VerticalAlignment="Top" Background="Gainsboro" DataContext="{StaticResource modtreeViewSource}" d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
             <Button Name="btnFirst" Content="|◄" Command="{StaticResource FirstCommand}" Style="{StaticResource NavButton}"/>
             <Button Name="btnPrev" Content="◄" Command="{StaticResource PreviousCommand}" Style="{StaticResource NavButton}"/>
             <Button Name="btnNext" Content="►" Command="{StaticResource NextCommand}" Style="{StaticResource NavButton}"/>
             <Button Name="btnLast" Content="►|" Command="{StaticResource LastCommand}" Style="{StaticResource NavButton}"/>
-            <Button Name="btnDelete" Content="Delete Module" Command="{StaticResource DeleteModuleCommand}" FontSize="11" Width="120" Style="{StaticResource NavButton}"/>
-            <Button Name="btnAdd" Content="New Module" Command="{StaticResource AddModuleCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
-            <!--<Button Name="btnNewOrder" Content="New Section" FontSize="11" Width="80" Style="{StaticResource NavButton}" Click="NewOrder_click"/>-->
-            <Button Name="btnSelectModule" Content="Select/Edit Module" Command="{StaticResource SelectModuleCommand}" FontSize="11" Width="100" Style="{StaticResource NavButton}"/>
-
-            <Button Name="btnUpdate" Content="Commit" Command="{StaticResource UpdateCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
-            <!--<Button Name="btnUpdate" Content="Commit" Command="{StaticResource UpdateCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>-->
+            <Button Name="btnAdd" Content="New Module" Command="{StaticResource AddModuleCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>            
+            <Button Name="btnSelectModule" Content="Select/Edit Module" Command="{StaticResource SelectModuleCommand}" FontSize="11" Width="100" Style="{StaticResource NavButton}"/>            
             <Button Content="Cancel" Name="btnCancel" Command="{StaticResource CancelCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
+            <Button Content="Refresh Data" Name="btnPopMTGrir" Command="{StaticResource RefreshCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>
+
+            <!--<Button Name="btnDelete" Content="Delete Module" Command="{StaticResource DeleteModuleCommand}" FontSize="11" Width="120" Style="{StaticResource NavButton}"/>-->
+            <!--<Button Name="btnUpdate" Content="Commit" Command="{StaticResource UpdateCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>-->
+            <!--<Button Name="btnUpdate" Content="Commit" Command="{StaticResource UpdateCommand}" FontSize="11" Width="80" Style="{StaticResource NavButton}"/>-->
+            <!--<Button Name="btnNewOrder" Content="New Section" FontSize="11" Width="80" Style="{StaticResource NavButton}" Click="NewOrder_click"/>-->
             <StackPanel Width="125"/>
         </StackPanel>
 
-        <Grid x:Name="ModuleInfoGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,12,0,0" Visibility="Visible" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource modtreeViewSource}" Grid.RowSpan="2" Width="1126" >
+        <Grid x:Name="ModuleInfoGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,12,0,0" Visibility="Collapsed" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource modtreeViewSource}" Grid.RowSpan="2" Width="1126" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -145,7 +148,40 @@
             <TextBox x:Name="edit_docTypeTextBox" Grid.Row="0" Grid.Column="3" Style="{StaticResource TextBox}"
                   Text="{Binding s102, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Margin="0,0,6,0" VerticalAlignment="Center" IsEnabled="False"/>
         </Grid>
-        <Grid x:Name="SectionInfoGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,52,0,0" Visibility="Visible" VerticalAlignment="Top" Background="WhiteSmoke"  Grid.RowSpan="2" Width="1126" >
+        <Grid x:Name="selctSecL1Grid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,10,0,0" Visibility="Collapsed" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource moduleViewSource}" Grid.RowSpan="2" Width="558" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Label Content="Section Name:" Grid.Column="0" Style="{StaticResource Label}" Height="auto"/>
+            <TextBox x:Name="sec_secNameTextBox" Style="{StaticResource TextBox}" Grid.Column="0"                 
+                     Text="{Binding s2, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+
+            <Label Content="Section Code:" Grid.Row="0" Grid.Column="1"  Style="{StaticResource Label}" Visibility="Collapsed" />
+            <TextBox x:Name="sec_secCodeTextBox" Style="{StaticResource TextBox}" Grid.Column="1"
+                  Text="{Binding s1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
+
+        </Grid>
+        <Grid x:Name="selctSecL2Grid" Grid.Row="1" HorizontalAlignment="Left" Margin="563,10,0,0" Visibility="Collapsed" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource secLvl2ViewSource}" Grid.RowSpan="2" Width="563" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Label Content="Section Name:" Grid.Row="0" Grid.Column="0" Style="{StaticResource Label}" />
+            <TextBox x:Name="sec_l2secNameTextBox" Grid.Column="0" Style="{StaticResource TextBox}"
+                  Text="{Binding s2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+
+            <Label Content="Section Code:" Grid.Row="0" Grid.Column="1" Style="{StaticResource Label}" VerticalAlignment="Center"/>
+            <TextBox x:Name="sec_l2secCodeTextBox" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBox}"
+                  Text="{Binding s1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
+        </Grid>
+        <Grid x:Name="SectionInfoGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,52,0,0" Visibility="Collapsed" VerticalAlignment="Top" Background="WhiteSmoke"  Grid.RowSpan="2" Width="1126" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -169,127 +205,7 @@
 
 
         </Grid>
-        <Grid x:Name="screenHeaderGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,90,0,0" Visibility="Visible" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource screenViewSource}" Grid.RowSpan="2" Width="1126" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
 
-            <Label Content="Doc Type:" Grid.Row="0"  Style="{StaticResource Label}" />
-            <TextBox x:Name="screen_docTypeTextBox" Style="{StaticResource TextBox}" 
-                     Text="{Binding s100, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
-
-            <Label Content="Status:" Grid.Column="1"  Style="{StaticResource Label}" />
-            <TextBox x:Name="screen_statusTextBox" Style="{StaticResource TextBox}" Grid.Column="1"
-                  Text="{Binding s101, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
-
-            <Label Content="Tab:" Grid.Column="2" Grid.Row="0" Style="{StaticResource Label}"/>
-            <ComboBox x:Name="screen_tabComboBox" Grid.Column="2" Grid.Row="0" Style="{StaticResource ComboBox}" Text="{Binding s101}" HorizontalAlignment="Right" >
-                <ComboBoxItem Content="M"/>
-                <ComboBoxItem Content="D"/>
-                <ComboBoxItem Content="RPT"/>
-            </ComboBox>
-
-            <Label Content="Tree Level:" Grid.Column="3"  Style="{StaticResource Label}"  />
-            <TextBox x:Name="screen_treelvlTextBox" Style="{StaticResource TextBox}" Grid.Column="3"
-                  Text="{Binding s39, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
-
-            <Label Content="Screen Name:" Grid.Column="0" Grid.Row="1"  Style="{StaticResource Label}" />
-            <TextBox x:Name="screen_screenNameTextBox" Style="{StaticResource TextBox}" Grid.Column="0" Grid.Row="1"
-                  Text="{Binding s39, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
-
-            <Label Content="Screen Code:" Grid.Column="1" Grid.Row="1"  Style="{StaticResource Label}" />
-            <TextBox x:Name="screen_screenCodeTextBox" Style="{StaticResource TextBox}" Grid.Column="1" Grid.Row="1"
-                  Text="{Binding s39, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
-
-        </Grid>
-        <Grid x:Name="screenButtonsGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,165,0,0" Visibility="Visible" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource screenViewSource}" Grid.RowSpan="2" Width="1126" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-
-            <Label Content="BUTTONS" FontFamily="Copperplate Gothic Bold" HorizontalAlignment="Center" />
-            <CheckBox x:Name="btns_addCB" Content="Add" Grid.Column="1" Style="{StaticResource CheckBx}"  />
-            <CheckBox x:Name="btns_editCB" Content="Edit" Grid.Column="2" Style="{StaticResource CheckBx}"  />
-            <CheckBox x:Name="btns_deleteCB" Content="Delete" Grid.Column="3" Style="{StaticResource CheckBx}"  />
-            <CheckBox x:Name="btns_postCB" Content="Post" Grid.Column="4" Style="{StaticResource CheckBx}"  />
-            <CheckBox x:Name="btns_previewCB" Content="Preview" Grid.Column="5" Style="{StaticResource CheckBx}"  />
-
-        </Grid>
-        <Grid x:Name="screenStatusGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,193,0,0" Visibility="Visible" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource screenViewSource}" Grid.RowSpan="2" Width="1126" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-
-            <Label Content="STATUS" FontFamily="Copperplate Gothic Bold" HorizontalAlignment="Center" />
-            <CheckBox x:Name="sts_postedCB" Content="Posted" Grid.Column="1" Style="{StaticResource CheckBx}"  />
-            <CheckBox x:Name="sts_unpostedCB" Content="UnPosted" Grid.Column="2" Style="{StaticResource CheckBx}"  />
-        </Grid>
-        <Grid x:Name="dvGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,220,0,0" Visibility="Visible" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource screenDVViewSource}" Grid.RowSpan="2" Width="1126" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <Label Content="Field :" Grid.Column="0" Style="{StaticResource Label}" />
-            <TextBox x:Name="dv_fieldTextBox" Style="{StaticResource TextBox}" Grid.Column="0"                 
-                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
-            
-            <Label Content="Name :" Grid.Column="1" Style="{StaticResource Label}" />
-            <TextBox x:Name="dv_nameTextBox" Style="{StaticResource TextBox}" Grid.Column="1"                 
-                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
-
-            <Label Content="Combo Code :" Grid.Column="2" Style="{StaticResource Label}" />
-            <TextBox x:Name="dv_comboCdTextBox" Style="{StaticResource TextBox}" Grid.Column="2"                 
-                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
-
-            <Label Content="List Item :" Grid.Column="3" Style="{StaticResource Label}" />
-            <TextBox x:Name="dv_listItemTextBox" Style="{StaticResource TextBox}" Grid.Column="3"                 
-                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
-
-            <Label Content="Validation :" Grid.Column="0" Grid.Row="1"  Style="{StaticResource Label}" />
-            <TextBox x:Name="dv_validationTextBox" Style="{StaticResource TextBox}" Grid.Column="0" Grid.Row="1"
-                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
-
-            <Label Content="Tab Code :" Grid.Column="1" Grid.Row="1" Style="{StaticResource Label}" />
-            <TextBox x:Name="dv_tabCdTextBox" Style="{StaticResource TextBox}" Grid.Column="1" Grid.Row="1"                
-                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
-
-            <Label Content="Table Name:" Grid.Column="2" Grid.Row="1" Style="{StaticResource Label}" />
-            <TextBox x:Name="dv_tableNameTextBox" Style="{StaticResource TextBox}" Grid.Column="2" Grid.Row="1"                
-                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
-
-            <Label Content="Bootstrap:" Grid.Column="3" Grid.Row="1" Style="{StaticResource Label}" />
-            <TextBox x:Name="dv_botstrapTextBox" Style="{StaticResource TextBox}" Grid.Column="3" Grid.Row="1"                
-                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
-        </Grid>
-        
         <Grid x:Name="newSectionLvl1Grid" Grid.Row="1"  HorizontalAlignment="Left" Margin="5,60,0,0" Visibility="Collapsed" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource moduleViewSource}" Width="1126" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -344,8 +260,33 @@
             </Button>
 
         </Grid>
-        
+        <Grid x:Name="selSecCntlBtnGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,50,0,0"  Visibility="Collapsed" VerticalAlignment="Top" Background="WhiteSmoke" Width="1120" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
 
+            <Button x:Name="selSecCntrl_ssL1Btn" Content="Select Section" Grid.Column="1" Style="{StaticResource cmdButton}"  />
+            <Button x:Name="selSecCntrl_ssL2Btn" Content="Select Sub Section" Grid.Column="2" Style="{StaticResource cmdButton}"  />
+        </Grid>
+        <Grid x:Name="scrnCntlBtnGrid" Grid.Row="2" HorizontalAlignment="Center"  Visibility="Collapsed" VerticalAlignment="Top" Background="WhiteSmoke" Width="1126" Margin="0,5,0,0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="700" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+
+            <Button x:Name="screenNav_AddBtn" Content="Add Screen" Grid.Column="1" Style="{StaticResource cmdButton}"  />
+            <Button x:Name="screenNav_SelectBtn" Content="Edit Screen" Grid.Column="2" Style="{StaticResource cmdButton}"  />
+        </Grid>
         <!--<Grid x:Name="sectionGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,60,0,0" Visibility="Visible" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource modtreeViewSource}" Width="798">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="500" MinWidth="368"/>
@@ -379,11 +320,11 @@
 
         </Grid>-->
 
-        <Grid x:Name="creationModtreeGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,12,0,0"  Visibility="Collapsed" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource modtreeViewSource}">
+        <Grid x:Name="creationModtreeGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,12,0,0" Visibility="Visible" VerticalAlignment="Top" Background="WhiteSmoke" DataContext="{StaticResource modtreeViewSource}" Width="1121">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" MinWidth="300"/>
-                <ColumnDefinition Width="Auto" MinWidth="400"/>
-                <ColumnDefinition Width="Auto" MinWidth="230"/>
+                <ColumnDefinition Width="*" MinWidth="300"/>
+                <ColumnDefinition Width="*" MinWidth="360"/>
+                <ColumnDefinition Width="*" MinWidth="250"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
@@ -394,7 +335,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Label Content="Module Code:" Grid.Row="0" Style="{StaticResource Label}" Margin="0,1,0,0" VerticalAlignment="Center"/>
+            <Label Content="Module Code:" Grid.Row="0" Style="{StaticResource Label}"/>
             <TextBox x:Name="create_moduleCodeTextBox" Grid.Row="0" Style="{StaticResource TextBox}"
                   Text="{Binding s1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,6,0" VerticalAlignment="Center" />
             <Button Grid.Column="1" Content="Search" HorizontalAlignment="Left" Style="{StaticResource cmdButton}" VerticalAlignment="Center" Margin="10,0,0,0" Click="searchButton_Click" >
@@ -407,58 +348,67 @@
                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuColorKey}}"/>
                 </Button.Background>
             </Button>
-            <Button Grid.Column="1" Content="Select" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="240,0,0,0"  Click="selectButton_Click" FontFamily="Bahnschrift SemiBold" Style="{StaticResource cmdButton}">
+            <Button Grid.Column="2" Content="Add Section" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="100,3,3,3"  Click="selectButton_Click" FontFamily="Bahnschrift SemiBold" Style="{StaticResource cmdButton}">
+                <Button.Background>
+                    <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuColorKey}}"/>
+                </Button.Background>
+            </Button>
+            <Button Grid.Column="2" Content="Select Section" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="3,3,40,3"  Click="sec_addButton_Click" FontFamily="Bahnschrift SemiBold" Style="{StaticResource cmdButton}">
                 <Button.Background>
                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuColorKey}}"/>
                 </Button.Background>
             </Button>
 
-            <Label Content="Module Name:" Grid.Row="1" Style="{StaticResource Label}" Margin="0,1,0,0" VerticalAlignment="Top"/>
+
+            <Label Content="Module Name:" Grid.Row="1" Style="{StaticResource Label}"/>
             <TextBox x:Name="create_moduleNameTextBox" Grid.Row="1" Style="{StaticResource TextBox}"
-                  Text="{Binding s2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,6,0" VerticalAlignment="Top" IsEnabled="False"/>
+                  Text="{Binding s2, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
-            <Label Content="Product Code:" Grid.Row="2" Style="{StaticResource Label}" Margin="0,1,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="create_productCodeTextBox" Grid.Row="2" Style="{StaticResource TextBox}"                  Text="{Binding s105, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,6,0" VerticalAlignment="Top" IsEnabled="False"/>
+            <Label Content="Product Code:" Grid.Row="2" Style="{StaticResource Label}"/>
+            <TextBox x:Name="create_productCodeTextBox" Grid.Row="2" Style="{StaticResource TextBox}"                  
+                     Text="{Binding s105, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
-            <Label Content="ID :" Grid.Row="3" Style="{StaticResource Label}" Margin="0,2,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="create_idTextBox" Style="{StaticResource TextBox}" Grid.Row="3"                  Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,6,0" VerticalAlignment="Top" IsEnabled="False"/>
+            <Label Content="ID :" Grid.Row="3" Style="{StaticResource Label}"/>
+            <TextBox x:Name="create_idTextBox" Style="{StaticResource TextBox}" Grid.Row="3"                  
+                     Text="{Binding n100, Mode=TwoWay,  NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
-            <Button Grid.Column="2" Content="Search" HorizontalAlignment="Left" Style="{StaticResource cmdButton}" VerticalAlignment="Center" Margin="10,0,0,0" Click="searchButton_Click" >
+            <Button Grid.Column="1" Content="Update" HorizontalAlignment="Left" Style="{StaticResource cmdButton}" VerticalAlignment="Center" Margin="240,0,0,0" Click="updateButton_Click" BorderBrush="#FF4EBA4D" >
                 <Button.Background>
                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuColorKey}}"/>
                 </Button.Background>
             </Button>
 
-            <Label Content="Level of Tree:" Grid.Row="4" Style="{StaticResource Label}" Margin="0,2,0,0" VerticalAlignment="Top"/>
+            <Label Content="Level of Tree:" Grid.Row="4" Style="{StaticResource Label}"/>
             <TextBox x:Name="create_treeLvlTextBox" Grid.Row="4" Style="{StaticResource TextBox}"
-                  Text="{Binding s39, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,6,0" VerticalAlignment="Top" IsEnabled="False" />
+                  Text="{Binding s39, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
 
             <Label Content="Previous Level Code:" Grid.Column="1" Grid.Row="1" Style="{StaticResource Label}"/>
             <TextBox x:Name="create_prevLvlTextBox" Grid.Column="1" Grid.Row="1" Style="{StaticResource TextBox}"
-                  Text="{Binding s40, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,6,0" VerticalAlignment="Top" IsEnabled="False"/>
+                  Text="{Binding s40, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
             <Label Content="Display Order:" Grid.Column="1" Grid.Row="2" Style="{StaticResource Label}"/>
             <TextBox x:Name="create_displayOrderTextBox" Grid.Column="1" Grid.Row="2" Style="{StaticResource TextBox}"
-                  Text="{Binding n1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Margin="0,0,6,0" VerticalAlignment="Top" IsEnabled="False"/>
+                  Text="{Binding n1, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  />
 
             <Label Content="Module Image:" Grid.Column="1" Grid.Row="3" Style="{StaticResource Label}"/>
-            <TextBox x:Name="create_moduleImgTextBox" Grid.Column="1" Grid.Row="3" Style="{StaticResource TextBox}"                  Text="{Binding s8, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,6,0" VerticalAlignment="Top" IsEnabled="False"/>
+            <TextBox x:Name="create_moduleImgTextBox" Grid.Column="1" Grid.Row="3" Style="{StaticResource TextBox}"                  
+                     Text="{Binding s8, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" />
 
             <Label Content="Status:" Grid.Column="2" Grid.Row="4" Style="{StaticResource Label}"/>
-            <TextBox x:Name="create_statusTextBox"  Grid.Column="2" Grid.Row="4" Style="{StaticResource TextBox}" Text="{Binding s101, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,6,0" VerticalAlignment="Top" IsEnabled="False"/>
+            <TextBox x:Name="create_statusTextBox"  Grid.Column="2" Grid.Row="4" Style="{StaticResource TextBox}" Text="{Binding s101, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
 
             <Label Content="Parent:" Grid.Column="2" Grid.Row="1" Style="{StaticResource Label}"/>
-            <TextBox x:Name="create_parentTextBox"  Grid.Column="2" Grid.Row="1" Style="{StaticResource TextBox}" Text="{Binding s3, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,6,0" VerticalAlignment="Top" IsEnabled="False"/>
+            <TextBox x:Name="create_parentTextBox"  Grid.Column="2" Grid.Row="1" Style="{StaticResource TextBox}" Text="{Binding s3, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
 
             <Label Content="Doc Type:" Grid.Column="2" Grid.Row="2" Style="{StaticResource Label}"/>
             <TextBox x:Name="create_docTypeTextBox" Grid.Column="2" Grid.Row="2" Style="{StaticResource TextBox}"
-                  Text="{Binding s102, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Margin="0,0,6,0" VerticalAlignment="Top" IsEnabled="False"/>
+                  Text="{Binding s102, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
 
             <Label Content="Child Type:" Grid.Column="2" Grid.Row="3" Style="{StaticResource Label}"/>
-            <TextBox x:Name="create_childTypeTextBox"  Grid.Column="2" Grid.Row="3" Style="{StaticResource TextBox}" Text="{Binding s100, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Margin="0,0,6,0" VerticalAlignment="Top" IsEnabled="False"/>
+            <TextBox x:Name="create_childTypeTextBox"  Grid.Column="2" Grid.Row="3" Style="{StaticResource TextBox}" Text="{Binding s100, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
         </Grid>
         <Grid x:Name="existingModtreeGrid" Grid.Row="1" HorizontalAlignment="Left" Margin="5,10,0,0" Visibility="Collapsed" VerticalAlignment="Top" Background="AntiqueWhite" DataContext="{StaticResource modtreeViewSource}" Width="1126">
@@ -569,15 +519,16 @@
 
         <DataGrid x:Name="modtreeDataGrid" HorizontalAlignment="Center" Height="338" Grid.Row="2" VerticalAlignment="Top" Width="1121" SelectionUnit="FullRow" SelectionMode="Single" IsSynchronizedWithCurrentItem="True"  Margin="0,10,0,0" Visibility="Collapsed" ItemsSource="{Binding Source={StaticResource modtreeViewSource}}"/>
 
-        <DataGrid x:Name="moduleDataGrid" HorizontalAlignment="Center" Height="341" Grid.Row="2" Width="1121" SelectionUnit="FullRow" SelectionMode="Single" IsSynchronizedWithCurrentItem="True"  Margin="0,13,0,0" Visibility="Collapsed" SelectionChanged="moduleDataGrid_SelectionChanged" ItemsSource="{Binding Source={StaticResource moduleViewSource}}" />
+        <DataGrid x:Name="moduleDataGrid" HorizontalAlignment="Left" Height="330" Grid.Row="1" Width="1121" SelectionUnit="FullRow" SelectionMode="Single" IsSynchronizedWithCurrentItem="True"  Margin="5,84,0,92" Visibility="Collapsed" SelectionChanged="moduleDataGrid_SelectionChanged" ItemsSource="{Binding Source={StaticResource moduleViewSource}}" Grid.RowSpan="2" />
 
-        <DataGrid x:Name="secLvl2DataGrid" HorizontalAlignment="Center" Height="341" Grid.Row="2" Width="1121" SelectionUnit="FullRow" SelectionMode="Single" IsSynchronizedWithCurrentItem="True"  Margin="0,13,0,0" Visibility="Collapsed" SelectionChanged="moduleDataGrid_SelectionChanged" ItemsSource="{Binding Source={StaticResource secLvl2ViewSource}}" />
+        <DataGrid x:Name="secLvl2DataGrid" HorizontalAlignment="Left" Height="330" Grid.Row="1" Width="1121" SelectionUnit="FullRow" SelectionMode="Single" IsSynchronizedWithCurrentItem="True" Margin="5,85,0,5" Visibility="Collapsed" SelectionChanged="moduleDataGrid_SelectionChanged" ItemsSource="{Binding Source={StaticResource secLvl2ViewSource}}" />
 
         <Button x:Name="addScreenButton"  Content="Add Screen" HorizontalAlignment="Right" Style="{StaticResource cmdButton}" VerticalAlignment="Top" Click="addScreenButton_Click" Height="35" Width="182" Margin="0,258,10,0" Grid.Row="2" Visibility="Collapsed" >
             <Button.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuColorKey}}"/>
             </Button.Background>
         </Button>
+
 
 
     </Grid>
