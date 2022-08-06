@@ -13,6 +13,7 @@ namespace WpfApp1
     internal class DAL
     {
         private DBEntities modtreeContext = null;
+        SqlConnection conn = new SqlConnection();
 
         public DAL()
         {
@@ -51,11 +52,11 @@ namespace WpfApp1
             entry.s2 = secName;
             entry.s3 = "1";
             entry.s39 = "1";
-            entry.s40 = module.s1.ToString().Substring(0, 2);
             entry.s100 = "SEC";
-            entry.s101 = module.s101;
             entry.s102 = "SEC";
-            entry.s105 = module.s105;            
+            entry.s101 = module.s101;
+            entry.s105 = module.s105;
+            entry.s40 = module.s1.ToString().Substring(0, 2);
 
             if (entry != null)
             {
@@ -100,19 +101,17 @@ namespace WpfApp1
            
         //}
 
-        public static SqlConnection GetConnection()
+        public SqlConnection GetConnection()
         {
             string sql = @"Data Source = localhost;
                             Initial Catalog = LocalMaster;
                             Integrated Security = true ";
-            SqlConnection conn = new SqlConnection(sql);
+            conn = new SqlConnection(sql);
             try
             {
                 conn.Open();
-                MessageBox.Show("Sql Connected.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                //MessageBox.Show("Sql Connected.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                 //MessageBox.Show("Module code already exits!", "", MessageBoxButton.OK, MessageBoxImage.Error);
-
-
             }
             catch (SqlException ex)
             {
@@ -122,6 +121,10 @@ namespace WpfApp1
             return conn;
         }
 
+        public void CloseConn()
+        {
+            conn.Close();
+        }
         public static string[] dtToSArray(DataTable dt, char type)
         {
             string[] arr = new string[1];
@@ -155,7 +158,7 @@ namespace WpfApp1
         {
             //IDictionary<int, string> comboData = new Dictionary<int, string>();
 
-            SqlConnection conn = GetConnection();
+            conn = GetConnection();
             SqlDataAdapter da = new SqlDataAdapter(sql, conn);
             DataTable dt = new DataTable();
 
@@ -167,6 +170,7 @@ namespace WpfApp1
             //    //captionCb_sPnl.Items.Add(dt.Rows[i]["ItemName"].toString());
             //}
 
+            conn.Close();
             return dt;
         }
 
@@ -180,34 +184,58 @@ namespace WpfApp1
         }
 
 
-        public void UpdateStudent(modtree modtre)
+        public bool UpdateMod(modtree modtre)
         {
-            decimal id = modtre.n100;
-            var  modtreFind= this.Get(Convert.ToInt32(id));
-            if (modtreFind != null)
+            try
             {
-                modtreFind.s100 = modtre.s100;
-                modtreFind.s101 = modtre.s101;
-                modtreFind.s102 = modtre.s102;
-                modtreFind.s1 = modtre.s1;
-                modtreFind.s2 = modtre.s2;
-                modtreFind.s3 = modtre.s3;
-                modtreFind.s8 = modtre.s8;
-                modtreFind.s39 = modtre.s39;
-                modtreFind.s40 = modtre.s40;
-                modtreFind.n1 = modtre.n1;
-                modtreeContext.SaveChanges();
+                decimal id = modtre.n100;
+                var modtreFind = this.Get(Convert.ToInt32(id));
+                if (modtreFind != null)
+                {
+                    modtreFind.s100 = modtre.s100;
+                    modtreFind.s101 = modtre.s101;
+                    modtreFind.s102 = modtre.s102;
+                    modtreFind.s1 = modtre.s1;
+                    modtreFind.s2 = modtre.s2;
+                    modtreFind.s3 = modtre.s3;
+                    modtreFind.s8 = modtre.s8;
+                    modtreFind.s39 = modtre.s39;
+                    modtreFind.s40 = modtre.s40;
+                    modtreFind.n1 = modtre.n1;
+                    modtreeContext.SaveChanges();
+                }
+                return true;
+                //MessageBox.Show("Sql Connected.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error\n" + ex.Message, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                //throw;
+            }
+            return false;
+           
+            
         }
 
         public void RemoveMod(decimal id)
         {
-            var modtreObj = modtreeContext.modtrees.Find(id);
-            if (modtreObj != null)
+            try
             {
-                modtreeContext.modtrees.Remove(modtreObj);
-                modtreeContext.SaveChanges();
+                var modtreObj = modtreeContext.modtrees.Find(id);
+                if (modtreObj != null)
+                {
+                    modtreeContext.modtrees.Remove(modtreObj);
+                    modtreeContext.SaveChanges();
+                }
+                MessageBox.Show("Module Deleted", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+
             }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Error\n" + ex.Message, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                //throw;
+            }       
+            
         }
     }
 }

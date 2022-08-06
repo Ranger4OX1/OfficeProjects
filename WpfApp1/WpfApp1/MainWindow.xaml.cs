@@ -25,6 +25,7 @@ namespace WpfApp1
     ///
     public partial class MainWindow : Window
     {
+        private const Visibility visible = Visibility.Visible;
         DBEntities context = new DBEntities();
 
         CollectionViewSource modtreeViewSource;
@@ -111,25 +112,25 @@ namespace WpfApp1
             
         }
 
-        private void UpdateCommandHandler(object sender, ExecutedRoutedEventArgs e)
-        {            
-            modtree mt = new modtree()
-            {
-                n100 = Convert.ToInt32(idTextBox.Text),
-                s100 = childTypeComboBox.Text,
-                s101 = statusComboBox.Text,
-                s102 = docTypeTextBox.Text,
-                s105 = productCodeTextBox.Text,
-                s1 = moduleCodeTextBox.Text,
-                s2 = moduleNameTextBox.Text,
-                s3 = parentComboBox.Text,
-                s8 = moduleImgTextBox.Text,
-                s39 = treeLvlTextBox.Text,
-                s40 = prevLvlTextBox.Text,
-                n1 = Convert.ToInt32(displayOrderTextBox.Text)
-            };
-            dal.UpdateStudent(mt);
-        }
+        //private void UpdateCommandHandler(object sender, ExecutedRoutedEventArgs e)
+        //{            
+        //    modtree mt = new modtree()
+        //    {
+        //        n100 = Convert.ToInt32(idTextBox.Text),
+        //        s100 = childTypeComboBox.Text,
+        //        s101 = statusComboBox.Text,
+        //        s102 = docTypeTextBox.Text,
+        //        s105 = productCodeTextBox.Text,
+        //        s1 = moduleCodeTextBox.Text,
+        //        s2 = moduleNameTextBox.Text,
+        //        s3 = parentComboBox.Text,
+        //        s8 = moduleImgTextBox.Text,
+        //        s39 = treeLvlTextBox.Text,
+        //        s40 = prevLvlTextBox.Text,
+        //        n1 = Convert.ToInt32(displayOrderTextBox.Text)
+        //    };
+        //    dal.UpdateStudent(mt);
+        //}
 
         private void RefreshCommandCommandHandler(object sender, ExecutedRoutedEventArgs e)
         {
@@ -141,8 +142,8 @@ namespace WpfApp1
             //sectionGrid.Visibility = Visibility.Collapsed;
             ModuleInfoGrid.Visibility = Visibility.Collapsed;
             creationModtreeGrid.Visibility = Visibility.Collapsed;
-            existingModtreeGrid.Visibility = Visibility.Visible;
-            modtreeDataGrid.Visibility = Visibility.Visible;           
+            existingModtreeGrid.Visibility = visible;
+            modtreeDataGrid.Visibility = visible;           
         }
 
         private void ResetControls()
@@ -177,8 +178,8 @@ namespace WpfApp1
         private void CancelCommandHandler(object sender, ExecutedRoutedEventArgs e)
         {
             Collapse();
-
             ResetControls();
+            sysStatLbl.Content = "System Ready";
         }
 
         ///Collapse Evrything HAHAH!!
@@ -207,8 +208,8 @@ namespace WpfApp1
             Collapse();
 
             existingModtreeGrid.Visibility = Visibility.Collapsed;
-            creationModtreeGrid.Visibility = Visibility.Visible;    
-            modtreeDataGrid.Visibility = Visibility.Visible;
+            creationModtreeGrid.Visibility = visible;    
+            modtreeDataGrid.Visibility = visible;
 
         }
 
@@ -228,26 +229,26 @@ namespace WpfApp1
 
         }
 
-        private void moduleDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var cust = modViewSource.View.CurrentItem as modtree;
-            if (cust == null)
-            {
-                MessageBox.Show("No customer selected.");
-                return;
-            }
+        //private void moduleDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    var cust = modViewSource.View.CurrentItem as modtree;
+        //    if (cust == null)
+        //    {
+        //        MessageBox.Show("No customer selected.");
+        //        return;
+        //    }
 
-            //section_sectionCodeTextBox.Text  = cust.s1.ToString();
-            //
-            //section_sectionNameTextBox.Text = cust.s2.ToString();
+        //    //section_sectionCodeTextBox.Text  = cust.s1.ToString();
+        //    //
+        //    //section_sectionNameTextBox.Text = cust.s2.ToString();
 
-        }
+        //}
 
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
             
             selectedModule = dal.GetRecord(create_moduleCodeTextBox.Text);
-            MessageBox.Show(create_moduleCodeTextBox.Text);
+            sysStatLbl.Content = create_moduleCodeTextBox.Text;
 
             create_idTextBox.Text = selectedModule.n100.ToString();
             create_childTypeTextBox.Text = selectedModule.s100.ToString();
@@ -269,8 +270,10 @@ namespace WpfApp1
 
         private void deleteButton_Click(object sender, RoutedEventArgs e)
         {
-            modtree temp = new modtree();
-            temp.n100 = Convert.ToDecimal(create_idTextBox.Text);
+            if (MessageBox.Show("All parts of the Module will be deleted\n", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                dal.RemoveMod(Convert.ToDecimal(create_idTextBox.Text));
+            }            
         }
 
         private void StkPnlNavButtons_IsEnabled(bool flag)
@@ -317,20 +320,14 @@ namespace WpfApp1
                 modtreeDataGrid.Visibility = Visibility.Collapsed;
                 creationModtreeGrid.Visibility = Visibility.Collapsed;
 
-                ModuleInfoGrid.Visibility = Visibility.Visible;
-                newSectionLvl1Grid.Visibility = Visibility.Visible;
-                newSectionLvl2Grid.Visibility = Visibility.Visible;
-
-                //string modCode = selectedModule.s1.ToString().Substring(0, 2);
-                //string sql = "select n100,s100,s102,s1,s2 from modtree where left(s1, 2) = '" + modCode + "' and(s100 = 'MOD' or s100 = 'SEC') order by s1";
-
-                //modViewSource.Source = dal.Exec(sql);
-                //modViewSource.View.Refresh();
-
                 edit_idTextBox.Text = selectedModule.n100.ToString();
                 edit_moduleCodeTextBox.Text = selectedModule.s1.ToString();
                 edit_moduleNameTextBox.Text = selectedModule.s2.ToString();
                 edit_docTypeTextBox.Text = selectedModule.s102.ToString();
+
+                ModuleInfoGrid.Visibility = visible;
+                newSectionLvl1Grid.Visibility = visible;
+                newSectionLvl2Grid.Visibility = visible;
             }
             else
             {
@@ -347,6 +344,7 @@ namespace WpfApp1
         private void editScreenButton_Click(object sender, RoutedEventArgs e)
         {
         }
+
         private void addSecLvl1Button_Click(object sender, RoutedEventArgs e)
         {
             modViewSource.View.Refresh();
@@ -358,7 +356,7 @@ namespace WpfApp1
                 {
                     dal.InsertSectionLvl1(selectedModule, newSectionLvl1_sectionNameTextBox.Text, newSectionLvl1_sectionCodeTextBox.Text);
                     newSectionLvl2Grid.IsEnabled = true;
-                    addScreenButton.Visibility = Visibility.Visible;
+                    addScreenButton.Visibility = visible;
 
                     selectedSecLvl1.s1 = newSectionLvl1_sectionCodeTextBox.Text;
                     selectedSecLvl1.s2 = newSectionLvl1_sectionNameTextBox.Text;
@@ -432,12 +430,12 @@ namespace WpfApp1
                         s8 = moduleImgTextBox.Text,
                         s39 = treeLvlTextBox.Text,
                         s40 = prevLvlTextBox.Text,
-                        n1 = Convert.ToInt32(displayOrderTextBox.Text)
+                        n1 = Convert.ToDecimal(displayOrderTextBox.Text)
                     };
                     if (rules.modtreeValidation(mt) == true)
                     {
                         dal.AddStudent(mt);
-                        MessageBox.Show("New record successfully saved.");
+                        sysStatLbl.Content = "Record successfully saved.";
                         ResetControls();
                     }
                 }
@@ -459,46 +457,60 @@ namespace WpfApp1
 
         private void updateButton_Click(object sender, RoutedEventArgs e)
         {
-            modtree mt = new modtree()
-            {
-                n100 = Convert.ToInt32(idTextBox.Text),
-                s100 = childTypeComboBox.Text,
-                s101 = statusComboBox.Text,
-                s102 = docTypeTextBox.Text,
-                s105 = productCodeTextBox.Text,
-                s1 = moduleCodeTextBox.Text,
-                s2 = moduleNameTextBox.Text,
-                s3 = parentComboBox.Text,
-                s8 = moduleImgTextBox.Text,
-                s39 = treeLvlTextBox.Text,
-                s40 = prevLvlTextBox.Text,
-                n1 = Convert.ToInt32(displayOrderTextBox.Text)
-            };
-            dal.UpdateStudent(mt);
+            modtree mt = new modtree();
+
+            mt.n100 = Convert.ToInt32(idTextBox.Text);
+            mt.s100 = childTypeComboBox.Text;
+            mt.s101 = statusComboBox.Text;
+            mt.s102 = docTypeTextBox.Text;
+            mt.s105 = productCodeTextBox.Text;
+            mt.s1 = moduleCodeTextBox.Text;
+            mt.s2 = moduleNameTextBox.Text;
+            mt.s3 = parentComboBox.Text;
+            mt.s8 = moduleImgTextBox.Text;
+            mt.s39 = treeLvlTextBox.Text;
+            mt.s40 = prevLvlTextBox.Text;
+            mt.n1 = Convert.ToDecimal(displayOrderTextBox.Text);
+
+            if (dal.UpdateMod(mt))
+                sysStatLbl.Content = "Record Updated";
         }
 
         private void sec_addButton_Click(object sender, RoutedEventArgs e)
         {
             Collapse();
 
-            secLvl2DataGrid.Visibility = Visibility.Visible;
-            selctSecL1Grid.Visibility = Visibility.Visible;
-            selctSecL2Grid.Visibility = Visibility.Visible;
-            selSecCntlBtnGrid.Visibility = Visibility.Visible;
-            scrnCntlBtnGrid.Visibility = Visibility.Visible;
+            ModuleInfoGrid.Visibility = visible;
+            selctSecL1Grid.Visibility = visible;
+            selctSecL2Grid.Visibility = visible;
+            selSecCntlBtnGrid.Visibility = visible;
+            scrnCntlBtnGrid.Visibility = visible;
+
+            moduleDataGrid.Visibility = visible;
 
             string modCode = selectedModule.s1.ToString().Substring(0, 2);
             string sql = "SELECT n100, s100, s101, s102, s105, s1, s2, s3, s8, s39, s40, n1 FROM modtree WHERE s100 = 'SEC' AND LEFT(s1,2)= '" + modCode + "' AND LEN(s1)= 4 ORDER BY s1 DESC";
             modViewSource.Source = dal.Exec(sql);
             modViewSource.View.Refresh();
 
-            moduleDataGrid.Visibility = Visibility.Visible;
-            
-
-
-
         }
 
+        private void selSecCntrl_ssL1Btn_Click(object sender, RoutedEventArgs e)
+        {
+            selectedSecLvl1.s1 = sec_secCodeTextBox.Text;
+            selectedSecLvl1.s2 = sec_secNameTextBox.Text;
+            selectedSecLvl1.s101 = selectedModule.s101;
+            selectedSecLvl1.s105 = selectedModule.s105;
+            selectedSecLvl1.s40 = selectedModule.s1.ToString().Substring(0, 2);
+
+            sysStatLbl.Content = "Section Selected";
+
+            selctSecL2Grid.IsEnabled = true;
+            moduleDataGrid.Visibility = Visibility.Collapsed;
+            secLvl2DataGrid.Visibility = visible;
+            PopulatesecLvl2ViewSource();
+
+        }
         ///// ednds heree
     }
 }
